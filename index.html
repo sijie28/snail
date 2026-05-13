@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Snail AI</title>
+  <title>SNAIL</title>
 
   <style>
 
@@ -13,33 +13,28 @@
       padding:40px;
     }
 
-    h1{
-      font-size:48px;
-    }
-
     textarea{
       width:100%;
       height:120px;
-      background:#111;
-      color:white;
+      background:black;
+      color:#00ff88;
       border:1px solid #00ff88;
-      padding:20px;
-      font-size:20px;
+      padding:10px;
+      font-size:18px;
     }
 
     button{
       margin-top:20px;
-      padding:15px 30px;
-      font-size:20px;
+      padding:10px 20px;
       background:#00ff88;
       border:none;
-      cursor:pointer;
+      font-size:18px;
     }
 
     #reply{
       margin-top:40px;
-      font-size:24px;
       white-space:pre-wrap;
+      line-height:1.6;
     }
 
   </style>
@@ -49,41 +44,66 @@
 
 <h1>SNAIL</h1>
 
-<p>Talk to the snail.</p >
+<p>
+touch me and speak to me
+</p >
 
 <textarea id="input"></textarea>
 
 <br>
 
-<button onclick="sendMessage()">SEND</button>
+<button onclick="talk()">
+SEND
+</button>
 
 <div id="reply"></div>
 
 <script>
 
-async function sendMessage(){
+async function talk(){
 
-  const text = document.getElementById("input").value;
+  const text =
+    document.getElementById("input").value;
 
-  document.getElementById("reply").innerText = "thinking...";
+  document.getElementById("reply").innerHTML =
+    "thinking...";
 
-  const response = await fetch("/api/chat",{
+  const response = await fetch(
+    "https://api.openai.com/v1/chat/completions",
+    {
+      method:"POST",
 
-    method:"POST",
+      headers:{
+        "Content-Type":"application/json",
 
-    headers:{
-      "Content-Type":"application/json"
-    },
+        "Authorization":
+        "Bearer 你的APIKEY"
+      },
 
-    body:JSON.stringify({
-      message:text
-    })
+      body:JSON.stringify({
 
-  });
+        model:"gpt-4o-mini",
+
+        messages:[
+          {
+            role:"system",
+            content:
+            "You are a poetic snail creature speaking softly to humans."
+          },
+
+          {
+            role:"user",
+            content:text
+          }
+        ]
+      })
+    }
+  );
 
   const data = await response.json();
 
-  document.getElementById("reply").innerText = data.reply;
+  document.getElementById("reply").innerHTML =
+    data.choices[0].message.content;
 }
 
 </script>
