@@ -2,41 +2,58 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>SNAIL</title>
+  <title>Snail</title>
+  <style>
+    body {
+      background: #07110d;
+      color: #39ff6a;
+      font-family: monospace;
+      padding: 40px;
+    }
+    input {
+      width: 420px;
+      padding: 10px;
+    }
+    button {
+      padding: 10px;
+    }
+    #reply {
+      margin-top: 30px;
+      color: #39ff6a;
+      white-space: pre-wrap;
+    }
+  </style>
 </head>
 
-<body style="background:black;color:#00ff88;font-family:monospace;padding:40px;">
+<body>
+  <h1>蜗牛</h1>
 
-<h1>SNAIL</h1>
+  <input id="message" placeholder="talk to the snail">
+  <button onclick="sendMessage()">发送</button>
 
-<input id="msg" placeholder="talk to the snail"
-style="width:300px;height:40px;font-size:18px;">
+  <div id="reply"></div>
 
-<button onclick="sendMsg()">SEND</button>
+  <script>
+    async function sendMessage() {
+      const text = document.getElementById("message").value;
+      const replyBox = document.getElementById("reply");
 
-<p id="reply"></p >
+      replyBox.innerText = "……";
 
-<script>
-async function sendMsg() {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: text
+        })
+      });
 
-  const text = document.getElementById("msg").value;
+      const data = await response.json();
 
-  const response = await fetch("/api/chat", {
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json"
-    },
-    body:JSON.stringify({
-      message:text
-    })
-  });
-
-  const data = await response.json();
-
-  document.getElementById("reply").innerText =
-    data.reply;
-}
-</script>
-
+      replyBox.innerText = data.reply || "没有收到回复";
+    }
+  </script>
 </body>
 </html>
