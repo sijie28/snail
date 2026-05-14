@@ -1,57 +1,84 @@
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>interface</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>talk to me</title>
 
 <style>
+*{
+  box-sizing:border-box;
+}
+
 body{
   margin:0;
   background:white;
   color:black;
   font-family:Helvetica, Arial, sans-serif;
-  padding:60px;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.container{
+  width:100%;
+  max-width:420px;
+  padding:28px;
 }
 
 h1{
-  font-size:18px;
+  font-size:24px;
   font-weight:400;
-  margin-bottom:40px;
+  margin-bottom:28px;
+  text-align:left;
 }
 
 input{
-  width:360px;
-  padding:12px;
+  width:100%;
+  padding:16px;
   border:1px solid black;
-  font-size:16px;
+  font-size:18px;
   outline:none;
+  border-radius:0;
+  background:white;
 }
 
 button{
-  padding:12px 18px;
+  width:100%;
+  margin-top:14px;
+  padding:16px;
   border:1px solid black;
   background:white;
+  color:black;
   cursor:pointer;
-  font-size:16px;
+  font-size:18px;
+  border-radius:0;
 }
 
 #reply{
-  margin-top:40px;
-  font-size:18px;
-  line-height:1.6;
+  margin-top:32px;
+  font-size:20px;
+  line-height:1.5;
   white-space:pre-wrap;
+  min-height:80px;
 }
 </style>
 </head>
 
 <body>
 
-<h1>talk to me</h1>
+<div class="container">
 
-<input id="message" placeholder="input">
-<button onclick="sendMessage()">send</button>
+  <h1>talk to me</h1>
 
-<div id="reply"></div>
+  <input id="message" placeholder="input">
+  <button onclick="sendMessage()">send</button>
+
+  <div id="reply"></div>
+
+</div>
 
 <script>
 async function sendMessage() {
