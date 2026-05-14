@@ -1,59 +1,46 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Snail</title>
-  <style>
-    body {
-      background: #07110d;
-      color: #39ff6a;
-      font-family: monospace;
-      padding: 40px;
-    }
-    input {
-      width: 420px;
-      padding: 10px;
-    }
-    button {
-      padding: 10px;
-    }
-    #reply {
-      margin-top: 30px;
-      color: #39ff6a;
-      white-space: pre-wrap;
-    }
-  </style>
-</head>
+<style>
 
-<body>
-  <h1>蜗牛</h1>
+body{
+  margin:0;
+  background:white;
+  color:black;
+  font-family:Helvetica,Arial,sans-serif;
 
-  <input id="message" placeholder="talk to the snail">
-  <button onclick="sendMessage()">发送</button>
+  padding:60px;
+}
 
-  <div id="reply"></div>
+h1{
+  font-size:20px;
+  font-weight:400;
+}
 
-  <script>
-    async function sendMessage() {
-      const text = document.getElementById("message").value;
-      const replyBox = document.getElementById("reply");
+input{
+  width:400px;
+  padding:12px;
 
-      replyBox.innerText = "……";
+  border:1px solid black;
 
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          message: text
-        })
-      });
+  font-size:16px;
 
-      const data = await response.json();
+  outline:none;
+}
 
-      replyBox.innerText = data.reply || "没有收到回复";
-    }
-  </script>
-</body>
-</html>
+button{
+  padding:12px 20px;
+
+  border:1px solid black;
+
+  background:white;
+
+  cursor:pointer;
+}
+
+#reply{
+  margin-top:30px;
+
+  font-size:18px;
+
+  line-height:1.6;
+}
+
+</style>
