@@ -2,39 +2,41 @@ export default async function handler(req, res) {
 
   const { message } = req.body;
 
-  try {
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "system",
-            content: "You are a poetic snail that talks emotionally and strangely."
-          },
-          {
-            role: "user",
-            content: message
-          }
-        ]
-      })
-    });
+    method: "POST",
 
-    const data = await response.json();
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+    },
 
-    res.status(200).json({
-      reply: data.choices[0].message.content
-    });
+    body: JSON.stringify({
 
-  } catch (error) {
+      model: "gpt-4o-mini",
 
-    res.status(200).json({
-      reply: "snail cannot speak right now"
-    });
-  }
+      messages: [
+
+        {
+          role: "system",
+          content: "You are an AI assistant. Reply naturally, clearly, and briefly. Do not pretend to be a snail. Do not roleplay. Speak like a normal AI talking to a human."
+        },
+
+        {
+          role: "user",
+          content: message
+        }
+
+      ]
+
+    })
+
+  });
+
+  const data = await response.json();
+
+  res.status(200).json({
+    reply: data.choices[0].message.content
+  });
+
 }
