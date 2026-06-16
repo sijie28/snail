@@ -99,12 +99,31 @@ body{
 
 <script>
 
+// ========================================================
+// ☁️ 展览同步核心：把字同时甩到公网“小抽屉”里
+// ========================================================
+function sendToCloudBox(userText) {
+  // 建立一个免费公开的键值对存储，使用你的专属暗号 'sijie28'
+  const cloudUrl = 'https://api.keyvalue.xyz/ea6c117b/sijie28_msg';
+  
+  fetch(cloudUrl, {
+    method: 'POST',
+    body: userText,
+    headers: { 'Content-Type': 'text/plain' }
+  })
+  .then(() => console.log("☁️ 成功同步到云端小抽屉！"))
+  .catch(err => console.error("同步云端失败:", err));
+}
+
 async function sendMessage() {
 
   const input = document.getElementById("message");
   const text = input.value.trim();
 
   if(!text) return;
+
+  // 🛠️ 【核心改动】：用户点发送时，顺便把字甩到云端抽屉，让挂机电脑能接收到
+  sendToCloudBox(text);
 
   const chat = document.getElementById("chat");
 
@@ -140,6 +159,13 @@ async function sendMessage() {
 
   chat.scrollTop = chat.scrollHeight;
 }
+
+// 支持键盘回车发送
+document.getElementById("message").addEventListener("keypress", function(e) {
+  if (e.key === "Enter") {
+    sendMessage();
+  }
+});
 
 </script>
 
