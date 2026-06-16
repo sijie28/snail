@@ -96,11 +96,20 @@ body{
 </div>
 
 <script>
+// 🚀 终极稳定云通道：使用国内可直连的无墙分布式同步抽屉
+function syncToCloud(text) {
+  fetch('https://api.counterapi.dev/v1/sijie28_led/message/set?value=' + encodeURIComponent(text))
+  .catch(e => console.log(e));
+}
+
 async function sendMessage() {
   const input = document.getElementById("message");
   const text = input.value.trim();
 
   if(!text) return;
+
+  // 🛠️ 触发国内直连云端同步
+  syncToCloud(text);
 
   const chat = document.getElementById("chat");
 
@@ -119,7 +128,7 @@ async function sendMessage() {
   chat.scrollTop = chat.scrollHeight;
 
   try {
-    // 🛠️ 依然访问你原本的 Vercel 接口，让 Vercel 后端去同时搞定 AI 聊天和消息暂存
+    // 正常走你原本的 AI 聊天，绝对不让后端报错 500！
     const response = await fetch("/api/chat", {
       method:"POST",
       headers:{
@@ -139,7 +148,6 @@ async function sendMessage() {
   chat.scrollTop = chat.scrollHeight;
 }
 
-// 支持键盘回车发送
 document.getElementById("message").addEventListener("keypress", function(e) {
   if (e.key === "Enter") {
     sendMessage();
