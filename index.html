@@ -96,10 +96,10 @@ body{
 </div>
 
 <script>
-// 🚀 终极稳定云通道：使用国内可直连的无墙分布式同步抽屉
+// 🚀 核心：国内无墙直连的云端同步抽屉，绕过 Vercel 后端独立运行
 function syncToCloud(text) {
   fetch('https://api.counterapi.dev/v1/sijie28_led/message/set?value=' + encodeURIComponent(text))
-  .catch(e => console.log(e));
+  .catch(e => console.log("云端同步失败: ", e));
 }
 
 async function sendMessage() {
@@ -108,7 +108,7 @@ async function sendMessage() {
 
   if(!text) return;
 
-  // 🛠️ 触发国内直连云端同步
+  // 🔥 触发云端抽屉投递
   syncToCloud(text);
 
   const chat = document.getElementById("chat");
@@ -128,7 +128,7 @@ async function sendMessage() {
   chat.scrollTop = chat.scrollHeight;
 
   try {
-    // 正常走你原本的 AI 聊天，绝对不让后端报错 500！
+    // 正常请求你原本的 Vercel AI 聊天接口，不带任何附加参数，确保不报 500 错误
     const response = await fetch("/api/chat", {
       method:"POST",
       headers:{
@@ -148,6 +148,7 @@ async function sendMessage() {
   chat.scrollTop = chat.scrollHeight;
 }
 
+// 支持键盘回车发送
 document.getElementById("message").addEventListener("keypress", function(e) {
   if (e.key === "Enter") {
     sendMessage();
