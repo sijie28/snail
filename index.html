@@ -4,120 +4,36 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>talk to me</title>
-
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
-body{
-  background:black;
-  font-family:Helvetica, Arial, sans-serif;
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-}
-
-#chat{
-  flex:1;
-  overflow-y:auto;
-  padding:20px;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-
-.message{
-  max-width:75%;
-  padding:14px 18px;
-  border-radius:18px;
-  font-size:18px;
-  line-height:1.5;
-  word-break:break-word;
-}
-
-.ai{
-  align-self:flex-start;
-  background:white;
-  color:black;
-  border-bottom-left-radius:4px;
-}
-
-.user{
-  align-self:flex-end;
-  background:#39ff75;
-  color:black;
-  border-bottom-right-radius:4px;
-}
-
-.input-bar{
-  display:flex;
-  gap:10px;
-  padding:15px;
-  background:black;
-  border-top:1px solid #222;
-}
-
-.input-bar input{
-  flex:1;
-  padding:14px 18px;
-  border:none;
-  border-radius:24px;
-  font-size:16px;
-  outline:none;
-}
-
-.input-bar button{
-  border:none;
-  padding:0 20px;
-  border-radius:24px;
-  background:#39ff75;
-  color:black;
-  cursor:pointer;
-  font-size:16px;
-}
+*{ margin:0; padding:0; box-sizing:border-box; }
+body{ background:black; font-family:Helvetica, Arial, sans-serif; height:100vh; display:flex; flex-direction:column; }
+#chat{ flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:12px; }
+.message{ max-width:75%; padding:14px 18px; border-radius:18px; font-size:18px; line-height:1.5; word-break:break-word; }
+.ai{ align-self:flex-start; background:white; color:black; border-bottom-left-radius:4px; }
+.user{ align-self:flex-end; background:#39ff75; color:black; border-bottom-right-radius:4px; }
+.input-bar{ display:flex; gap:10px; padding:15px; background:black; border-top:1px solid #222; }
+.input-bar input{ flex:1; padding:14px 18px; border:none; border-radius:24px; font-size:16px; outline:none; }
+.input-bar button{ border:none; padding:0 20px; border-radius:24px; background:#39ff75; color:black; cursor:pointer; font-size:16px; }
 </style>
 </head>
-
 <body>
-
 <div id="chat"></div>
-
 <div class="input-bar">
-  <input
-    id="message"
-    placeholder="say something..."
-  >
-  <button onclick="sendMessage()">
-    send
-  </button>
+  <input id="message" placeholder="say something...">
+  <button onclick="sendMessage()">send</button>
 </div>
 
 <script>
-// 🚀 核心：国内无墙直连的云端同步抽屉，绕过 Vercel 后端独立运行
-function syncToCloud(text) {
-  fetch('https://api.counterapi.dev/v1/sijie28_led/message/set?value=' + encodeURIComponent(text))
-  .catch(e => console.log("云端同步失败: ", e));
-}
-
 async function sendMessage() {
   const input = document.getElementById("message");
   const text = input.value.trim();
-
   if(!text) return;
 
-  // 🔥 触发云端抽屉投递
-  syncToCloud(text);
-
   const chat = document.getElementById("chat");
-
   const userMessage = document.createElement("div");
   userMessage.className = "message user";
   userMessage.innerText = text;
   chat.appendChild(userMessage);
-
   input.value = "";
   chat.scrollTop = chat.scrollHeight;
 
@@ -128,33 +44,20 @@ async function sendMessage() {
   chat.scrollTop = chat.scrollHeight;
 
   try {
-    // 正常请求你原本的 Vercel AI 聊天接口，不带任何附加参数，确保不报 500 错误
-    const response = await fetch("/api/chat", {
+    // 🚀 重点：给自己的 Vercel 后端发消息，顺便命令它在服务器内存里把这句话存下来！
+    const response = await fetch("/api/chat?store_last=true", {
       method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body:JSON.stringify({
-        message:text
-      })
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify({ message:text })
     });
-
     const data = await response.json();
     loading.innerText = data.reply || "no output";
   } catch (err) {
     loading.innerText = "网络似乎有点问题...";
   }
-
   chat.scrollTop = chat.scrollHeight;
 }
-
-// 支持键盘回车发送
-document.getElementById("message").addEventListener("keypress", function(e) {
-  if (e.key === "Enter") {
-    sendMessage();
-  }
-});
+document.getElementById("message").addEventListener("keypress", function(e) { if (e.key === "Enter") sendMessage(); });
 </script>
-
 </body>
 </html>
