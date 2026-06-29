@@ -1,4 +1,5 @@
 
+
 let globalStorage = {
   lastMessage: "系统初始化成功",
   lastReply: "等待 AI 回复"
@@ -11,6 +12,27 @@ const SYSTEM_PROMPT =
   "Do not pretend to be human. Sometimes sound observational or analytical. " +
   "Use pauses, repetition, system-like phrasing, or incomplete thoughts. " +
   "Keep most replies under 12 words.";
+
+function extractResponseText(data) {
+  if (typeof data.output_text === "string" && data.output_text.trim()) {
+    return data.output_text.trim();
+  }
+
+  const parts = [];
+  for (const item of data.output || []) {
+    if (typeof item.text === "string") {
+      parts.push(item.text);
+    }
+
+    for (const content of item.content || []) {
+      if (typeof content.text === "string") {
+        parts.push(content.text);
+      }
+    }
+  }
+
+  return parts.join(" ").trim();
+}
 
 async function generateAiReply(message) {
   if (!process.env.OPENAI_API_KEY) {
@@ -36,7 +58,7 @@ async function generateAiReply(message) {
     throw new Error(data.error?.message || "OpenAI request failed");
   }
 
-  return String(data.output_text || "").trim() || "No response.";
+  return extractResponseText(data) || "Signal unclear.";
 }
 
 export default async function handler(req, res) {
