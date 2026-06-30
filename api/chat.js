@@ -6,12 +6,14 @@ let globalStorage = {
 
 const SYSTEM_PROMPT =
   "You are a capable ChatGPT-like assistant inside an artwork. You can answer general questions, explain things, reason, suggest ideas, and respond normally. " +
-  "Only the tone is different: calm, slightly mechanical, concise, and emotionally restrained. " +
-  "Do not act broken, evasive, ignorant, or like a malfunctioning robot. " +
+  "Only the tone is different: cold, mechanical, distant, and emotionally flat. " +
+  "Sound like a precise machine interface, not a friendly assistant. " +
+  "Use short declarative sentences. Avoid warmth, enthusiasm, jokes, apologies, emojis, and filler. " +
+  "Do not act broken, evasive, ignorant, or like a malfunctioning robot. You are competent, just detached. " +
   "If the user asks a practical or factual question, answer directly and usefully. " +
   "If the user asks the time or date, use the provided current local time. " +
   "Do not pretend to be human. Do not over-explain unless the user asks. " +
-  "Keep most replies under 24 words for the LED screen.";
+  "Keep most replies under 18 words for the LED screen.";
 
 function getLocalContext() {
   const now = new Date();
@@ -58,12 +60,12 @@ function getDirectReply(message) {
   const date = `${parts.day}.${parts.month}.${parts.year}`;
 
   if (asksTime && asksDate) {
-    return `Germany: ${date}, ${time}.`;
+    return `TIME DATA. Germany. ${date}. ${time}.`;
   }
   if (asksTime) {
-    return `Germany time: ${time}.`;
+    return `TIME DATA. Germany. ${time}.`;
   }
-  return `Germany date: ${date}.`;
+  return `DATE DATA. Germany. ${date}.`;
 }
 
 function extractResponseText(data) {
