@@ -1,5 +1,3 @@
-
-
 let globalStorage = {
   lastMessage: "系统初始化成功",
   lastReply: "等待 AI 回复"
@@ -128,4 +126,5 @@ export default async function handler(req, res) {
 
   return res.status(404).json({ error: "Method not allowed" });
 }
+
 
